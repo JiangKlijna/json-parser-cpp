@@ -26,16 +26,22 @@ json_arr* json_arr::put(const string value){
 
 string json_arr::toString(){
 	string s("[");
-	for (vector<json_node*>::iterator iter = data.begin(); iter != data.end(); iter++){
+	vector<json_node*>::iterator iter = data.begin();
+	while(true){
 		json_str* node = dynamic_cast<json_str*>(*iter);
 		s+=node->toString();
-    }
+		if(++iter == data.end()){
+			break;
+		}else{
+			s+=",";
+		}
+	}
 	s+="]";
 	return s;
 }
 
 //class json_str
-json_str::json_str(string str):json_node(json_status::str),data(str){}
+json_str::json_str(const string str):json_node(json_status::str),data(str){}
 
 string json_str::toString(){
 	return "\""+data+"\"";

@@ -63,10 +63,11 @@ string toString();
 class json_str: public json_node {
 	friend class json_obj;
 	friend class json_arr;
+	enum json_str_t {json_bool,json_char,json_int,json_long,json_float,json_double};
 	string data;
 public:
 
-	json_str(string);
+	json_str(const string);
 	string toString();
 };
 }
