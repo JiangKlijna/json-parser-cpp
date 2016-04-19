@@ -1,0 +1,4 @@
+make
+make clean
+echo ""
+./json
