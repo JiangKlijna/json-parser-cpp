@@ -13,10 +13,10 @@ using namespace std;
 #include "pjson.h"
 
 int main() {
-	pjson::json_arr arr;
-	arr.put("123");
-	arr.put("abc");
-	cout << arr.toString() << endl; // prints !!!Hello World!!!
+	pjson::json_arr *arr = new pjson::json_arr();
+	arr->put("123")->put("abc")->put("!@#");
+	cout << arr->toString() << endl; // prints !!!Hello World!!!
+	delete arr;
 	return 0;
 	//exit(EXIT_SUCCESS);
 }
