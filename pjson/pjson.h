@@ -12,6 +12,7 @@ class json_arr;
 class json_str;
 
 enum json_status {arr,obj,str};
+enum json_str_t {json_bool,json_int,json_long,json_double};
 
 class json_node {
 private:
@@ -31,10 +32,8 @@ private:
 public:
 	json_obj* put(const string, const string);
 	// json_obj* put(const string&, const bool&);
-	// json_obj* put(const string&, const char&);
 	// json_obj* put(const string&, const int&);
 	// json_obj* put(const string&, const long&);
-	// json_obj* put(const string&, const float&);
 	// json_obj* put(const string&, const double&);
 	// json_obj* put(const string&, const json_obj&);
 //	json_obj* put(const string&, const json_arr&);
@@ -49,10 +48,8 @@ public:
 	json_arr();
 	json_arr* put(const string);
 	// json_arr* put(const bool&);
-	// json_arr* put(const char&);
 	// json_arr* put(const int&);
 	// json_arr* put(const long&);
-	// json_arr* put(const float&);
 	// json_arr* put(const double&);
 //	json_arr* put(const json_obj&);
 	// json_arr* put(const json_arr&);
@@ -63,7 +60,8 @@ string toString();
 class json_str: public json_node {
 	friend class json_obj;
 	friend class json_arr;
-	enum json_str_t {json_bool,json_char,json_int,json_long,json_float,json_double};
+	//atob,atoi,atol,atof
+	
 	string data;
 public:
 
