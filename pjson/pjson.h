@@ -33,11 +33,10 @@ public:
 
 class json_obj: public json_node {
 private:
-	std::map<std::string, json_node*> data;
+	std::map<std::string, json_node*> *data;
 public:
 	json_obj();
-	// json_obj(const std::string &data);
-	// json_obj(const char *data);
+	json_obj(const std::string &str);
 	~json_obj();
 	//add or update element
 	json_obj* put(const std::string &key, const char *value);
@@ -50,7 +49,7 @@ public:
 	// json_obj* put(const std::string &key, const json_arr &value);
 
 	//erase element
-	// json_obj* erase(const std::string &key);
+	json_obj* erase(const std::string &key);
 
 	//get element
 	// std::string& get_string(const std::string &key);
@@ -68,11 +67,10 @@ public:
 
 class json_arr: public json_node {
 private:
-	std::vector<json_node*> data;
+	std::vector<json_node*> *data;
 public:
 	json_arr();
-	// json_arr(const std::string &data);
-	// json_arr(const char *data);
+	json_arr(const std::string &str);
 	~json_arr();
 	//add element
 	json_arr* put(const char *value);
@@ -85,7 +83,7 @@ public:
 	// json_arr* put(const json_arr &value);
 
 	//erase element
-	// json_obj* erase(const unsigned &index);
+	json_arr* erase(const unsigned &index);
 
 	//get element
 	// std::string& get_string(const unsigned &index);
@@ -115,7 +113,7 @@ private:
 public:
 	std::string toString();
 	json_str clone();
-	~json_str() = default;
+	~json_str();
 };
 struct json_tool {
 
