@@ -2,10 +2,23 @@
  * pjson.cpp
  *
  *  Created on: 2016-04-18
- *      Author: jiang
+ *      Author: jiangKlijna
  */
-#include "pjson.h"
+#include <iostream>
 #include <sstream>
+#include "pjson.h"
+
+#define P(data) std::cout<<(data)<<std::endl;
+#define PL P(__LINE__)
+
+#define COMMA ","
+#define QUOTE "\""
+#define SINGLE_QUOTE "'"
+#define COLON ":"
+#define SQUARE_BRACKETS_L "["
+#define SQUARE_BRACKETS_R "]"
+#define CURLY_BRACES_L "{"
+#define CURLY_BRACES_R "}"
 
 #define btos(b) (b) ? "true" : "false"
 #define xtos(x) ostringstream buf;buf << (x);return buf.str();
@@ -15,17 +28,16 @@ using namespace pjson;
 json_node::json_node(json_status _status) :
 	status(_status) {
 }
-json_node::~json_node(){
-
-}
-
-//class json_obj
+/**
+* class json_obj
+*/
 json_obj::json_obj() :
 	json_node(json_status::obj) {
 }
 json_obj::~json_obj(){
+	P("json_obj::~json_obj");
 }
-
+//add or update element
 json_obj* json_obj::put(const string &key, const char *value) {
 	string str(value);
 	delete data[key];
@@ -63,8 +75,7 @@ string json_obj::toString() {
 	buf << CURLY_BRACES_L;
 	map<string, json_node*>::iterator iter = data.begin();
 	while (true) {
-		json_str* node = dynamic_cast<json_str*>(iter->second);
-		buf << QUOTE << iter->first << QUOTE << COLON << node->toString();
+		buf << QUOTE << iter->first << QUOTE << COLON << iter->second->toString();
 		if (++iter == data.end()) {
 			break;
 		} else {
@@ -74,13 +85,16 @@ string json_obj::toString() {
 	buf << CURLY_BRACES_R;
 	return buf.str();
 }
-//class json_arr
+/**
+* class json_arr
+*/
 json_arr::json_arr() :
 	json_node(json_status::arr) {
 }
 json_arr::~json_arr(){
+	P("json_arr::~json_arr");
 }
-
+//add element
 json_arr* json_arr::put(const char *value) {
 	string str(value);
 	data.push_back(new json_str(str));
@@ -106,14 +120,13 @@ json_arr* json_arr::put(const double &value) {
 	data.push_back(new json_str(value));
 	return this;
 }
-
+//to json string
 string json_arr::toString() {
 	ostringstream buf;
 	buf << SQUARE_BRACKETS_L;
 	vector<json_node*>::iterator iter = data.begin();
 	while (true) {
-		json_str* node = dynamic_cast<json_str*>(*iter);
-		buf << node->toString();
+		buf << (*iter)->toString();
 		if (++iter == data.end()) {
 			break;
 		} else {
@@ -123,8 +136,9 @@ string json_arr::toString() {
 	buf << SQUARE_BRACKETS_R;
 	return buf.str();
 }
-
-//class json_str
+/**
+* class json_str
+*/
 json_str::json_str(const string &value, const json_str_t _str_t) :
 	json_node(json_status::str), str_t(_str_t), data(value) {
 }
@@ -143,8 +157,6 @@ json_str::json_str(const long &value) :
 json_str::json_str(const double &value) :
 	json_node(json_status::str), str_t(json_str_t::json_double), data(json_tool::dtos(value)) {
 }
-json_str::~json_str(){
-}
 
 string json_str::toString() {
 	return (str_t == json_str_t::json_s) ? (QUOTE + data + QUOTE) : (data);
@@ -152,8 +164,9 @@ string json_str::toString() {
 json_str json_str::clone(){
 	return new json_str(data, str_t);
 }
-
-//class json_tool
+/**
+* class json_tool
+*/
 inline string json_tool::itos(const int &i) {
 	xtos(i);
 }

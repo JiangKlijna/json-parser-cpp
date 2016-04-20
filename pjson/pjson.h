@@ -1,20 +1,13 @@
+/*
+ * pjson.h
+ *
+ *  Created on: 2016-04-18
+ *      Author: jiangKlijna
+ */
 #ifndef JIANGKLIJNA_PJSON_H__
 #define JIANGKLIJNA_PJSON_H__
-#include <iostream>
 #include <map>
 #include <vector>
-
-#define P(data) std::cout<<(data)<<std::endl;
-#define PL P(__LINE__)
-
-#define COMMA ","
-#define QUOTE "\""
-#define SINGLE_QUOTE "'"
-#define COLON ":"
-#define SQUARE_BRACKETS_L "["
-#define SQUARE_BRACKETS_R "]"
-#define CURLY_BRACES_L "{"
-#define CURLY_BRACES_R "}"
 
 namespace pjson {
 
@@ -35,7 +28,7 @@ protected:
 	json_node(json_status);
 public:
 	virtual std::string toString() = 0;
-	virtual ~json_node() = 0;
+	virtual ~json_node() = default;
 };
 
 class json_obj: public json_node {
@@ -43,6 +36,10 @@ private:
 	std::map<std::string, json_node*> data;
 public:
 	json_obj();
+	// json_obj(const std::string &data);
+	// json_obj(const char *data);
+	~json_obj();
+	//add or update element
 	json_obj* put(const std::string &key, const char *value);
 	json_obj* put(const std::string &key, const std::string &value);
 	json_obj* put(const std::string &key, const bool &value);
@@ -52,9 +49,21 @@ public:
 	// json_obj* put(const std::string &key, const json_obj &value);
 	// json_obj* put(const std::string &key, const json_arr &value);
 
+	//erase element
+	// json_obj* erase(const std::string &key);
+
+	//get element
+	// std::string& get_string(const std::string &key);
+	// bool& get_bool(const std::string &key);
+	// int& get_int(const std::string &key);
+	// long& get_long(const std::string &key);
+	// double& get_double(const std::string &key);
+	// json_arr& get_json_arr(const std::string &key);
+	// json_obj& get_json_obj(const std::string &key);
+
 	std::string toString();
 	//json_obj clone();
-	~json_obj();
+
 };
 
 class json_arr: public json_node {
@@ -62,7 +71,10 @@ private:
 	std::vector<json_node*> data;
 public:
 	json_arr();
-	json_arr(const std::string &data);
+	// json_arr(const std::string &data);
+	// json_arr(const char *data);
+	~json_arr();
+	//add element
 	json_arr* put(const char *value);
 	json_arr* put(const std::string &value);
 	json_arr* put(const bool &value);
@@ -72,9 +84,20 @@ public:
 	// json_arr* put(const json_obj &value);
 	// json_arr* put(const json_arr &value);
 
+	//erase element
+	// json_obj* erase(const unsigned &index);
+
+	//get element
+	// std::string& get_string(const unsigned &index);
+	// bool& get_bool(const unsigned &index);
+	// int& get_int(const unsigned &index);
+	// long& get_long(const unsigned &index);
+	// double& get_double(const unsigned &index);
+	// json_arr& get_json_arr(const unsigned &index);
+	// json_obj& get_json_obj(const unsigned &index);
+
 	std::string toString();
 	//json_arr clone();
-	~json_arr();
 };
 
 class json_str: public json_node {
@@ -92,13 +115,22 @@ private:
 public:
 	std::string toString();
 	json_str clone();
-	~json_str();
+	~json_str() = default;
 };
 struct json_tool {
 
 	inline static std::string itos(const int &);
 	inline static std::string ltos(const long &);
 	inline static std::string dtos(const double &);
+
+	// inline static int stoi(const std::string &);
+	// inline static long stol(const std::string &);
+	// inline static double stod(const std::string &);
+	// inline static bool stob(const std::string &);
+
+	inline static std::map<std::string, json_node*>* parse_obj(const std::string &);
+	inline static std::vector<json_node*>* parse_arr(const std::string &);
+
 };
 }
 #endif
