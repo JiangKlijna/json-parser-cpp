@@ -4,7 +4,17 @@
 #include <map>
 #include <vector>
 
-#define PT std::cout<<__LINE__<<std::endl;
+#define P(data) std::cout<<(data)<<std::endl;
+#define PL P(__LINE__)
+
+#define COMMA ","
+#define QUOTE "\""
+#define SINGLE_QUOTE "'"
+#define COLON ":"
+#define SQUARE_BRACKETS_L "["
+#define SQUARE_BRACKETS_R "]"
+#define CURLY_BRACES_L "{"
+#define CURLY_BRACES_R "}"
 
 namespace pjson {
 
