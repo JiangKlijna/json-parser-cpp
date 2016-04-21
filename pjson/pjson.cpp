@@ -4,6 +4,7 @@
  *  Created on: 2016-04-18
  *      Author: jiangKlijna
  */
+#include <cstdlib>
 #include <iostream>
 #include <sstream>
 #include "pjson.h"
@@ -143,8 +144,9 @@ json_arr* json_arr::erase(const unsigned &index){
 	if(index >= data->size()){
 		//TODO throw
 	}
-	// data->erase(index);
-
+	json_node *node = *(data->begin()+index);
+	data->erase(data->begin()+index);
+	delete node;
 	return this;
 }
 
@@ -207,6 +209,25 @@ inline string json_tool::ltos(const long &l) {
 inline string json_tool::dtos(const double &d) {
 	xtos(d);
 }
+inline int json_tool::stoi(const string &v){
+	return atoi(v.c_str());
+}
+inline long json_tool::stol(const string &v){
+	return atol(v.c_str());
+}
+inline double json_tool::stod(const string &v){
+	return atof(v.c_str());
+}
+inline bool json_tool::stob(const string &v){
+	if(v.size() == 4 && (v == "true" || v == "TRUE")){
+		return true;
+	}else if(v.size() == 5 && (v == "false" || v == "FALSE")){
+		return false;
+	}else{
+		//TODO Exception
+	}
+}
+
 inline map<string, json_node*>* json_tool::parse_obj(const std::string &str){
 	map<string, json_node*> *obj = new map<string, json_node*>();
 	//parse_obj

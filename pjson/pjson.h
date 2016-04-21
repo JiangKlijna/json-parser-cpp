@@ -84,6 +84,15 @@ public:
 
 	//erase element
 	json_arr* erase(const unsigned &index);
+	//update element
+	json_arr* put(const char *value, const unsigned &index);
+	json_arr* put(const std::string &value, const unsigned &index);
+	json_arr* put(const bool &value, const unsigned &index);
+	json_arr* put(const int &value, const unsigned &index);
+	json_arr* put(const long &value, const unsigned &index);
+	json_arr* put(const double &value, const unsigned &index);
+	// json_arr* put(const json_obj &value, const unsigned &index);
+	// json_arr* put(const json_arr &value, const unsigned &index);
 
 	//get element
 	// std::string& get_string(const unsigned &index);
@@ -121,10 +130,10 @@ struct json_tool {
 	inline static std::string ltos(const long &);
 	inline static std::string dtos(const double &);
 
-	// inline static int stoi(const std::string &);
-	// inline static long stol(const std::string &);
-	// inline static double stod(const std::string &);
-	// inline static bool stob(const std::string &);
+	inline static int stoi(const std::string &);
+	inline static long stol(const std::string &);
+	inline static double stod(const std::string &);
+	inline static bool stob(const std::string &);
 
 	inline static std::map<std::string, json_node*>* parse_obj(const std::string &);
 	inline static std::vector<json_node*>* parse_arr(const std::string &);
