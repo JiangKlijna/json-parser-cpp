@@ -11,9 +11,12 @@
 
 namespace pjson {
 
+class json_node;
 class json_obj;
 class json_arr;
 class json_str;
+class json_error;
+class json_tool;
 
 enum json_status {
 	arr, obj, str
@@ -24,10 +27,12 @@ enum json_str_t {
 
 class json_node {
 protected:
-	const json_status status;
 	json_node(json_status);
 public:
+	const json_status status;
 	virtual std::string toString() = 0;
+	virtual unsigned size() = 0;
+	virtual bool empty() = 0;
 	virtual ~json_node() = default;
 };
 
@@ -52,17 +57,18 @@ public:
 	json_obj* erase(const std::string &key);
 
 	//get element
-	// std::string& get_string(const std::string &key);
-	// bool& get_bool(const std::string &key);
-	// int& get_int(const std::string &key);
-	// long& get_long(const std::string &key);
-	// double& get_double(const std::string &key);
+	std::string& get_string(const std::string &key);
+	bool get_bool(const std::string &key);
+	int get_int(const std::string &key);
+	long get_long(const std::string &key);
+	double get_double(const std::string &key);
 	// json_arr& get_json_arr(const std::string &key);
 	// json_obj& get_json_obj(const std::string &key);
 
 	std::string toString();
-	//json_obj clone();
-
+	//json_obj* clone();
+	unsigned size();
+	bool empty();
 };
 
 class json_arr: public json_node {
@@ -104,7 +110,9 @@ public:
 	// json_obj& get_json_obj(const unsigned &index);
 
 	std::string toString();
-	//json_arr clone();
+	//json_arr* clone();
+	unsigned size();
+	bool empty();
 };
 
 class json_str: public json_node {
@@ -121,7 +129,9 @@ private:
 	json_str(const double &value);
 public:
 	std::string toString();
-	json_str clone();
+	json_str* clone();
+	unsigned size();
+	bool empty();
 	~json_str();
 };
 struct json_tool {
@@ -138,6 +148,9 @@ struct json_tool {
 	inline static std::map<std::string, json_node*>* parse_obj(const std::string &);
 	inline static std::vector<json_node*>* parse_arr(const std::string &);
 
+};
+struct json_error : public std::logic_error{
+	json_error(const std::string &s) : std::logic_error(s){}
 };
 }
 #endif

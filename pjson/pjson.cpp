@@ -9,7 +9,7 @@
 #include <sstream>
 #include "pjson.h"
 
-#define P(data) std::cout<<(data)<<std::endl;
+#define P(data) std::cout<<(data)<<std::endl
 #define PL P(__LINE__)
 
 #define EMIPT " "
@@ -25,8 +25,14 @@
 #define btos(b) (b) ? "true" : "false"
 #define xtos(x) ostringstream buf;buf << (x);return buf.str();
 
+#define ERROR(str) throw json_error(str)
+#define CHECK(b, str) if(b){ERROR(str);}
+#define CHECK_NULL(a, str) CHECK((nullptr == (a)), str)
+
 using namespace std;
 using namespace pjson;
+//
+
 json_node::json_node(json_status _status) :
 	status(_status) {
 }
@@ -76,10 +82,41 @@ json_obj* json_obj::put(const string &key, const double &value) {
 	return this;
 }
 //erase element
-json_obj* json_obj::erase(const std::string &key){
+json_obj* json_obj::erase(const string &key){
 	delete (*data)[key];
 	data->erase(key);
 	return this;
+}
+//get element
+string& json_obj::get_string(const string &key){
+	map<string, json_node*>::iterator iter = data->find(key);
+	CHECK(iter == data->end(), "is nullptr");
+	// return iter->second->toString();
+	return *(new string("daksl"));
+}
+bool json_obj::get_bool(const string &key){
+	map<string, json_node*>::iterator iter = data->find(key);
+	CHECK(iter == data->end(), "is nullptr");
+	CHECK(iter->second->status != json_status::str, "what type??");
+	return json_tool::stob(key);
+}
+int json_obj::get_int(const string &key){
+	map<string, json_node*>::iterator iter = data->find(key);
+	CHECK(iter == data->end(), "is nullptr");
+	CHECK(iter->second->status != json_status::str, "what type??");
+	return json_tool::stoi(key);
+}
+long json_obj::get_long(const string &key){
+	map<string, json_node*>::iterator iter = data->find(key);
+	CHECK(iter == data->end(), "is nullptr");
+	CHECK(iter->second->status != json_status::str, "what type??");
+	return json_tool::stol(key);
+}
+double json_obj::get_double(const string &key){
+	map<string, json_node*>::iterator iter = data->find(key);
+	CHECK(iter == data->end(), "is nullptr");
+	CHECK(iter->second->status != json_status::str, "what type??");
+	return json_tool::stod(key);
 }
 
 string json_obj::toString() {
@@ -87,7 +124,7 @@ string json_obj::toString() {
 	buf << CURLY_BRACES_L;
 	map<string, json_node*>::iterator iter = data->begin();
 	while (true) {
-		buf << QUOTE << iter->first << QUOTE << COLON << iter->second->toString();
+		buf << QUOTE << iter->first << QUOTE << COLON << iter->second->toString();PL;
 		if (++iter == data->end()) {
 			break;
 		} else {
@@ -97,13 +134,20 @@ string json_obj::toString() {
 	buf << CURLY_BRACES_R;
 	return buf.str();
 }
+unsigned json_obj::size(){
+	return data->size();
+}
+bool json_obj::empty(){
+	return data->empty();
+}
+
 /**
 * class json_arr
 */
 json_arr::json_arr() :
 	json_node(json_status::arr), data(new vector<json_node*>()) {
 }
-json_arr::json_arr(const std::string &str) :
+json_arr::json_arr(const string &str) :
 	json_node(json_status::arr), data(json_tool::parse_arr(str)){
 }
 json_arr::~json_arr(){
@@ -166,6 +210,12 @@ string json_arr::toString() {
 	buf << SQUARE_BRACKETS_R;
 	return buf.str();
 }
+unsigned json_arr::size(){
+	return data->size();
+}
+bool json_arr::empty(){
+	return data->empty();
+}
 /**
 * class json_str
 */
@@ -194,8 +244,14 @@ json_str::~json_str(){
 string json_str::toString() {
 	return (str_t == json_str_t::json_s) ? (QUOTE + data + QUOTE) : (data);
 }
-json_str json_str::clone(){
+json_str* json_str::clone(){
 	return new json_str(data, str_t);
+}
+unsigned json_str::size(){
+	return data.size();
+}
+bool json_str::empty(){
+	return data.empty();
 }
 /**
 * class json_tool
@@ -224,11 +280,11 @@ inline bool json_tool::stob(const string &v){
 	}else if(v.size() == 5 && (v == "false" || v == "FALSE")){
 		return false;
 	}else{
-		//TODO Exception
+		ERROR(v + "is not bool type");
 	}
 }
 
-inline map<string, json_node*>* json_tool::parse_obj(const std::string &str){
+inline map<string, json_node*>* json_tool::parse_obj(const string &str){
 	map<string, json_node*> *obj = new map<string, json_node*>();
 	//parse_obj
 	//ignore null
@@ -240,7 +296,7 @@ inline map<string, json_node*>* json_tool::parse_obj(const std::string &str){
 	return obj;
 }
 
-inline vector<json_node*>* json_tool::parse_arr(const std::string &str){
+inline vector<json_node*>* json_tool::parse_arr(const string &str){
 	vector<json_node*> *arr = new vector<json_node*>();
 	/*
 	string::size_t i = 0;

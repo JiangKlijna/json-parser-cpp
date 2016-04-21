@@ -4,8 +4,8 @@ using namespace std;
 
 #include "pjson.h"
 
-#define P(data) std::cout<<(data)<<std::endl;
-#define PL P(__LINE__);
+#define P(data) std::cout<<(data)<<std::endl
+#define PL P(__LINE__)
 
 
 int main() {
@@ -20,6 +20,11 @@ int main() {
 	pjson::json_obj *obj = new pjson::json_obj();
 	obj->put("key","value")->put("number",66)->put("key", "v2")->put("key", "v3");
 	obj->erase("number");
+	try{
+		obj->get_string("null key");
+	}catch(pjson::json_error &e){
+		P(e.what());
+	}
 	P(obj->toString());
 	delete obj;
 
