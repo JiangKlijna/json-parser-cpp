@@ -31,6 +31,7 @@ protected:
 public:
 	const json_status status;
 	virtual std::string toString() = 0;
+	virtual operator std::string() = 0;
 	virtual unsigned size() = 0;
 	virtual bool empty() = 0;
 	virtual ~json_node() = default;
@@ -66,6 +67,7 @@ public:
 	// json_obj& get_json_obj(const std::string &key);
 
 	std::string toString();
+	operator std::string();
 	//json_obj* clone();
 	unsigned size();
 	bool empty();
@@ -110,6 +112,7 @@ public:
 	// json_obj& get_json_obj(const unsigned &index);
 
 	std::string toString();
+	operator std::string();
 	//json_arr* clone();
 	unsigned size();
 	bool empty();
@@ -128,6 +131,11 @@ private:
 	json_str(const long &value);
 	json_str(const double &value);
 public:
+	operator bool();
+	operator int();
+	operator long();
+	operator double();
+	operator std::string();
 	std::string toString();
 	json_str* clone();
 	unsigned size();
@@ -151,6 +159,7 @@ struct json_tool {
 };
 struct json_error : public std::logic_error{
 	json_error(const std::string &s) : std::logic_error(s){}
+	operator std::string(){return what();}
 };
 }
 #endif

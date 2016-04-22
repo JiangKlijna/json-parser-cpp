@@ -12,6 +12,18 @@
 #define P(data) std::cout<<(data)<<std::endl
 #define PL P(__LINE__)
 
+//JSONArray[5] not found.
+//JSONArray[1] is not a Boolean.
+#define NOT_FOUND " not found"
+#define NOT_A_TYPE " is not a "
+#define NAME_BOOL "bool"
+#define NAME_INT "int"
+#define NAME_LONG "long"
+#define NAME_DOUBLE "double"
+#define NAME_OBJ "pjson::json_obj"
+#define NAME_ARR "pjson::json_arr"
+#define NAME_STR "pjson::json_str"
+
 #define EMIPT " "
 #define COMMA ","
 #define QUOTE "\""
@@ -134,6 +146,9 @@ string json_obj::toString() {
 	buf << CURLY_BRACES_R;
 	return buf.str();
 }
+json_obj::operator string(){
+	return toString();
+}
 unsigned json_obj::size(){
 	return data->size();
 }
@@ -210,6 +225,10 @@ string json_arr::toString() {
 	buf << SQUARE_BRACKETS_R;
 	return buf.str();
 }
+json_arr::operator string(){
+	return toString();
+}
+
 unsigned json_arr::size(){
 	return data->size();
 }
@@ -244,6 +263,22 @@ json_str::~json_str(){
 string json_str::toString() {
 	return (str_t == json_str_t::json_s) ? (QUOTE + data + QUOTE) : (data);
 }
+json_str::operator string(){
+	return data;
+}
+json_str::operator bool(){
+	return json_tool::stob(data);
+}
+json_str::operator int(){
+	return json_tool::stoi(data);
+}
+json_str::operator long(){
+	return json_tool::stol(data);
+}
+json_str::operator double(){
+	return json_tool::stod(data);
+}
+
 json_str* json_str::clone(){
 	return new json_str(data, str_t);
 }
@@ -280,7 +315,7 @@ inline bool json_tool::stob(const string &v){
 	}else if(v.size() == 5 && (v == "false" || v == "FALSE")){
 		return false;
 	}else{
-		ERROR(v + "is not bool type");
+		ERROR(v + " is not a bool");
 	}
 }
 

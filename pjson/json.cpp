@@ -23,7 +23,7 @@ int main() {
 	try{
 		obj->get_string("null key");
 	}catch(pjson::json_error &e){
-		P(e.what());
+		P((string) e);
 	}
 	P(obj->toString());
 	delete obj;
