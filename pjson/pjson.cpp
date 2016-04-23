@@ -12,8 +12,8 @@
 #define P(data) std::cout<<(data)<<std::endl
 #define PL P(__LINE__)
 
-//JSONArray[5] not found.
-//JSONArray[1] is not a Boolean.
+//pjson::json_arr[5] not found
+//pjson::json_obj[key] is not a bool
 #define NOT_FOUND " not found"
 #define NOT_A_TYPE " is not a "
 #define NAME_BOOL "bool"
@@ -136,7 +136,7 @@ string json_obj::toString() {
 	buf << CURLY_BRACES_L;
 	map<string, json_node*>::iterator iter = data->begin();
 	while (true) {
-		buf << QUOTE << iter->first << QUOTE << COLON << iter->second->toString();PL;
+		buf << QUOTE << iter->first << QUOTE << COLON << iter->second->toString();
 		if (++iter == data->end()) {
 			break;
 		} else {
@@ -155,12 +155,15 @@ unsigned json_obj::size(){
 bool json_obj::empty(){
 	return data->empty();
 }
+void json_obj::clear(){
+	data->clear();
+}
 
 /**
 * class json_arr
 */
 json_arr::json_arr() :
-	json_node(json_status::arr), data(new vector<json_node*>()) {
+	json_node(json_status::arr), data(new list<json_node*>()) {
 }
 json_arr::json_arr(const string &str) :
 	json_node(json_status::arr), data(json_tool::parse_arr(str)){
@@ -200,20 +203,22 @@ json_arr* json_arr::put(const double &value) {
 }
 //erase element
 json_arr* json_arr::erase(const unsigned &index){
-	if(index >= data->size()){
-		//TODO throw
-	}
-	json_node *node = *(data->begin()+index);
-	data->erase(data->begin()+index);
-	delete node;
+	CHECK(index >= data->size(), "");
+	// json_node *node = *(data->begin()+index);
+	// data->erase(data->begin()+index);
+	// delete node;
 	return this;
+}
+	//update element
+json_arr* json_arr::put(const int &value, const unsigned &index){
+
 }
 
 //to json string
 string json_arr::toString() {
 	ostringstream buf;
 	buf << SQUARE_BRACKETS_L;
-	vector<json_node*>::iterator iter = data->begin();
+	list<json_node*>::iterator iter = data->begin();
 	while (true) {
 		buf << (*iter)->toString();
 		if (++iter == data->end()) {
@@ -234,6 +239,9 @@ unsigned json_arr::size(){
 }
 bool json_arr::empty(){
 	return data->empty();
+}
+void json_arr::clear(){
+	data->clear();
 }
 /**
 * class json_str
@@ -288,6 +296,10 @@ unsigned json_str::size(){
 bool json_str::empty(){
 	return data.empty();
 }
+void json_str::clear(){
+	//TODO
+}
+
 /**
 * class json_tool
 */
@@ -331,8 +343,8 @@ inline map<string, json_node*>* json_tool::parse_obj(const string &str){
 	return obj;
 }
 
-inline vector<json_node*>* json_tool::parse_arr(const string &str){
-	vector<json_node*> *arr = new vector<json_node*>();
+inline list<json_node*>* json_tool::parse_arr(const string &str){
+	list<json_node*> *arr = new list<json_node*>();
 	/*
 	string::size_t i = 0;
 	while(str[i] == EMIPT){

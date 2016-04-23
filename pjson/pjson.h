@@ -7,7 +7,7 @@
 #ifndef JIANGKLIJNA_PJSON_H__
 #define JIANGKLIJNA_PJSON_H__
 #include <map>
-#include <vector>
+#include <list>
 
 namespace pjson {
 
@@ -33,6 +33,7 @@ public:
 	virtual std::string toString() = 0;
 	virtual operator std::string() = 0;
 	virtual unsigned size() = 0;
+	virtual void clear() = 0;
 	virtual bool empty() = 0;
 	virtual ~json_node() = default;
 };
@@ -70,12 +71,13 @@ public:
 	operator std::string();
 	//json_obj* clone();
 	unsigned size();
+	void clear();
 	bool empty();
 };
 
 class json_arr: public json_node {
 private:
-	std::vector<json_node*> *data;
+	std::list<json_node*> *data;
 public:
 	json_arr();
 	json_arr(const std::string &str);
@@ -115,6 +117,7 @@ public:
 	operator std::string();
 	//json_arr* clone();
 	unsigned size();
+	void clear();
 	bool empty();
 };
 
@@ -139,6 +142,7 @@ public:
 	std::string toString();
 	json_str* clone();
 	unsigned size();
+	void clear();
 	bool empty();
 	~json_str();
 };
@@ -154,7 +158,7 @@ struct json_tool {
 	inline static bool stob(const std::string &);
 
 	inline static std::map<std::string, json_node*>* parse_obj(const std::string &);
-	inline static std::vector<json_node*>* parse_arr(const std::string &);
+	inline static std::list<json_node*>* parse_arr(const std::string &);
 
 };
 struct json_error : public std::logic_error{
