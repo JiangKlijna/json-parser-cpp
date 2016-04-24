@@ -15,8 +15,9 @@ class json_node;
 class json_obj;
 class json_arr;
 class json_str;
-class json_error;
 class json_tool;
+class json_error;
+class json_parser;
 
 enum json_status {
 	arr, obj, str
@@ -26,11 +27,12 @@ enum json_str_t {
 };
 
 class json_node {
+	friend json_parser;
 protected:
 	json_node(json_status);
 public:
 	const json_status status;
-	virtual std::string toString() = 0;
+	virtual std::string str() = 0;
 	virtual operator std::string() = 0;
 	virtual unsigned size() = 0;
 	virtual void clear() = 0;
@@ -41,6 +43,7 @@ public:
 class json_obj: public json_node {
 private:
 	std::map<std::string, json_node*> *data;
+	json_obj(std::map<std::string, json_node*> *);
 public:
 	json_obj();
 	json_obj(const std::string &str);
@@ -67,7 +70,7 @@ public:
 	// json_arr& get_json_arr(const std::string &key);
 	// json_obj& get_json_obj(const std::string &key);
 
-	std::string toString();
+	std::string str();
 	operator std::string();
 	//json_obj* clone();
 	unsigned size();
@@ -78,6 +81,7 @@ public:
 class json_arr: public json_node {
 private:
 	std::list<json_node*> *data;
+	json_arr(std::list<json_node*> *);
 public:
 	json_arr();
 	json_arr(const std::string &str);
@@ -113,7 +117,7 @@ public:
 	// json_arr& get_json_arr(const unsigned &index);
 	// json_obj& get_json_obj(const unsigned &index);
 
-	std::string toString();
+	std::string str();
 	operator std::string();
 	//json_arr* clone();
 	unsigned size();
@@ -139,7 +143,7 @@ public:
 	operator long();
 	operator double();
 	operator std::string();
-	std::string toString();
+	std::string str();
 	json_str* clone();
 	unsigned size();
 	void clear();
@@ -157,13 +161,28 @@ struct json_tool {
 	inline static double stod(const std::string &);
 	inline static bool stob(const std::string &);
 
-	inline static std::map<std::string, json_node*>* parse_obj(const std::string &);
-	inline static std::list<json_node*>* parse_arr(const std::string &);
+	inline static std::map<std::string, json_node*>* parser_obj(const std::string &);
+	inline static std::list<json_node*>* parser_arr(const std::string &);
+	inline static json_str* parse_str(const std::string &);
 
 };
 struct json_error : public std::logic_error{
-	json_error(const std::string &s) : std::logic_error(s){}
-	operator std::string(){return what();}
+	json_error(const std::string &s);
+	operator std::string();
 };
+class json_parser{
+	friend json_tool;
+
+	unsigned pos;
+	std::string str;
+	json_parser(const std::string &);
+	void trim();
+	std::map<std::string, json_node*>* read_obj();
+	std::list<json_node*>* read_arr();
+
+
+
+};
+
 }
 #endif

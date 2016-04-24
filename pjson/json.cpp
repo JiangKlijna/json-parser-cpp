@@ -13,8 +13,8 @@ int main() {
 	const char* cstr = "cstr";
 	string cppstr("cppstr");
 	arr->put(cstr)->put(cppstr)->put(0.2356)->put(-68)->put(false);
-	arr->erase(4);
-	P(arr->toString());
+	// arr->erase(4);
+	P(arr->str());
 	delete arr;
 
 	pjson::json_obj *obj = new pjson::json_obj();
@@ -25,7 +25,7 @@ int main() {
 	}catch(pjson::json_error &e){
 		P((string) e);
 	}
-	P(obj->toString());
+	P(obj->str());
 	delete obj;
 
 	exit(EXIT_SUCCESS);

@@ -24,7 +24,7 @@
 #define NAME_ARR "pjson::json_arr"
 #define NAME_STR "pjson::json_str"
 
-#define EMIPT " "
+#define EMIPT ' '
 #define COMMA ","
 #define QUOTE "\""
 #define SINGLE_QUOTE "'"
@@ -55,7 +55,10 @@ json_obj::json_obj() :
 	json_node(json_status::obj), data(new map<string, json_node*>()) {
 }
 json_obj::json_obj(const string &str) :
-	json_node(json_status::obj), data(json_tool::parse_obj(str)){
+	json_node(json_status::obj), data(json_tool::parser_obj(str)){
+}
+json_obj::json_obj(std::map<std::string, json_node*> *_data) :
+	json_node(json_status::obj), data(_data){
 }
 json_obj::~json_obj(){
 	delete data;
@@ -103,7 +106,7 @@ json_obj* json_obj::erase(const string &key){
 string& json_obj::get_string(const string &key){
 	map<string, json_node*>::iterator iter = data->find(key);
 	CHECK(iter == data->end(), "is nullptr");
-	// return iter->second->toString();
+	// return iter->second->str();
 	return *(new string("daksl"));
 }
 bool json_obj::get_bool(const string &key){
@@ -131,12 +134,12 @@ double json_obj::get_double(const string &key){
 	return json_tool::stod(key);
 }
 
-string json_obj::toString() {
+string json_obj::str() {
 	ostringstream buf;
 	buf << CURLY_BRACES_L;
 	map<string, json_node*>::iterator iter = data->begin();
 	while (true) {
-		buf << QUOTE << iter->first << QUOTE << COLON << iter->second->toString();
+		buf << QUOTE << iter->first << QUOTE << COLON << iter->second->str();
 		if (++iter == data->end()) {
 			break;
 		} else {
@@ -147,7 +150,7 @@ string json_obj::toString() {
 	return buf.str();
 }
 json_obj::operator string(){
-	return toString();
+	return str();
 }
 unsigned json_obj::size(){
 	return data->size();
@@ -166,7 +169,10 @@ json_arr::json_arr() :
 	json_node(json_status::arr), data(new list<json_node*>()) {
 }
 json_arr::json_arr(const string &str) :
-	json_node(json_status::arr), data(json_tool::parse_arr(str)){
+	json_node(json_status::arr), data(json_tool::parser_arr(str)){
+}
+json_arr::json_arr(std::list<json_node*> *_data) :
+	json_node(json_status::arr), data(_data){
 }
 json_arr::~json_arr(){
 	// for(map<string, json_node*>::iterator iter = data->begin();){
@@ -204,8 +210,8 @@ json_arr* json_arr::put(const double &value) {
 //erase element
 json_arr* json_arr::erase(const unsigned &index){
 	CHECK(index >= data->size(), "");
-	// json_node *node = *(data->begin()+index);
-	// data->erase(data->begin()+index);
+	// json_node *node = *(data->begin() + index);
+	// data->erase(data->begin() + index);
 	// delete node;
 	return this;
 }
@@ -215,12 +221,12 @@ json_arr* json_arr::put(const int &value, const unsigned &index){
 }
 
 //to json string
-string json_arr::toString() {
+string json_arr::str() {
 	ostringstream buf;
 	buf << SQUARE_BRACKETS_L;
 	list<json_node*>::iterator iter = data->begin();
 	while (true) {
-		buf << (*iter)->toString();
+		buf << (*iter)->str();
 		if (++iter == data->end()) {
 			break;
 		} else {
@@ -231,7 +237,7 @@ string json_arr::toString() {
 	return buf.str();
 }
 json_arr::operator string(){
-	return toString();
+	return str();
 }
 
 unsigned json_arr::size(){
@@ -268,7 +274,7 @@ json_str::~json_str(){
 	P("json_str::~json_str::"+data);
 
 }
-string json_str::toString() {
+string json_str::str() {
 	return (str_t == json_str_t::json_s) ? (QUOTE + data + QUOTE) : (data);
 }
 json_str::operator string(){
@@ -331,51 +337,70 @@ inline bool json_tool::stob(const string &v){
 	}
 }
 
-inline map<string, json_node*>* json_tool::parse_obj(const string &str){
+inline map<string, json_node*>* json_tool::parser_obj(const string &str){
+	json_parser parser(str);
+	return parser.read_obj();
+}
+
+inline list<json_node*>* json_tool::parser_arr(const string &str){
+	json_parser parser(str);
+	return parser.read_arr();
+}
+
+inline json_str* json_tool::parse_str(const std::string &){
+	return nullptr;
+}
+/**
+* class json_error
+*/
+json_error::json_error(const std::string &s) : logic_error(s){}
+json_error::operator string(){
+	return what();
+}
+/**
+* class json_parser
+*/
+
+json_parser::json_parser(const std::string &s) : str(s), pos(0){}
+void json_parser::trim(){
+	while(str[pos] == EMIPT)
+		pos++;
+}
+std::map<std::string, json_node*>* json_parser::read_obj(){
 	map<string, json_node*> *obj = new map<string, json_node*>();
-	//parse_obj
-	//ignore null
 	/*
 	while(){
 
 	}*/
-	P(str);
 	return obj;
 }
-
-inline list<json_node*>* json_tool::parse_arr(const string &str){
-	list<json_node*> *arr = new list<json_node*>();
-	/*
-	string::size_t i = 0;
-	while(str[i] == EMIPT){
-		i++;
-	}
-	if(str[i] != "{"){
+std::list<json_node*>* json_parser::read_arr(){
+	trim();
+	if(str[pos] != '{'){
 		//TODO Exception
 	}
-	//parse_arr
-	while(;i<str.size();i++){
+	list<json_node*> *arr = new list<json_node*>();
+	/*
+	while(int size = str.size(); pos<size; ++pos){
+		/*
 		json_node* node = nullptr;
 		switch (str[i]) {
-			case "{":
-			int length = str.find("}");
-			node = new json_obj(str.substr(i, length - i));
-			i = length;
+			case '}':
+
+			return arr;
+			case '{':
+			node = new json_obj(read_obj());
 			break;
-			case "[":
-			int length = str.find("]");
-			node = new json_arr(str.substr(i, length - i));
-			i = length;
+			case '[':
+			node = new json_obj(read_arr());
 			break;
 			case ",":
 			break;
 			default:
-			int length = str.find(",");
-			new str
+
 			break;
 		}
 		arr->push_back(node);
-	}
-	*/
-	return arr;
+	}*/
+	ERROR("no }");
 }
