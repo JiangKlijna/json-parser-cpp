@@ -380,13 +380,12 @@ std::list<json_node*>* json_parser::read_arr(){
 		//TODO Exception
 	}
 	list<json_node*> *arr = new list<json_node*>();
-	/*
-	while(int size = str.size(); pos<size; ++pos){
-		/*
+
+	for(int size = str.size(); pos<size; ++pos){
 		json_node* node = nullptr;
+		/*
 		switch (str[i]) {
 			case '}':
-
 			return arr;
 			case '{':
 			node = new json_obj(read_obj());
@@ -394,13 +393,14 @@ std::list<json_node*>* json_parser::read_arr(){
 			case '[':
 			node = new json_obj(read_arr());
 			break;
-			case ",":
+			case ',':
+
 			break;
 			default:
 
 			break;
-		}
+		}*/
 		arr->push_back(node);
-	}*/
+	}
 	ERROR("no }");
 }
