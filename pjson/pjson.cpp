@@ -383,6 +383,7 @@ std::list<json_node*>* json_parser::read_arr(){
 
 	for(int size = str.size(); pos<size; ++pos){
 		json_node* node = nullptr;
+		
 		/*
 		switch (str[i]) {
 			case '}':
