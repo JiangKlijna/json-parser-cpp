@@ -27,7 +27,6 @@ enum json_str_t {
 };
 
 class json_node {
-	friend json_parser;
 protected:
 	json_node(json_status);
 public:
@@ -41,6 +40,7 @@ public:
 };
 
 class json_obj: public json_node {
+	friend class json_parser;
 private:
 	std::map<std::string, json_node*> *data;
 	json_obj(std::map<std::string, json_node*> *);
@@ -79,6 +79,7 @@ public:
 };
 
 class json_arr: public json_node {
+	friend class json_parser;
 private:
 	std::list<json_node*> *data;
 	json_arr(std::list<json_node*> *);
@@ -128,6 +129,7 @@ public:
 class json_str: public json_node {
 	friend class json_obj;
 	friend class json_arr;
+	friend class json_parser;
 private:
 	const json_str_t str_t;
 	const std::string data;
@@ -163,7 +165,6 @@ struct json_tool {
 
 	inline static std::map<std::string, json_node*>* parser_obj(const std::string &);
 	inline static std::list<json_node*>* parser_arr(const std::string &);
-	inline static json_str* parse_str(const std::string &);
 
 };
 struct json_error : public std::logic_error{
@@ -179,7 +180,7 @@ class json_parser{
 	void trim();
 	std::map<std::string, json_node*>* read_obj();
 	std::list<json_node*>* read_arr();
-
+	json_str* read_str();
 
 
 };

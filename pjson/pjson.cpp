@@ -225,7 +225,7 @@ string json_arr::str() {
 	ostringstream buf;
 	buf << SQUARE_BRACKETS_L;
 	list<json_node*>::iterator iter = data->begin();
-	while (true) {
+	while (*iter) {
 		buf << (*iter)->str();
 		if (++iter == data->end()) {
 			break;
@@ -347,9 +347,6 @@ inline list<json_node*>* json_tool::parser_arr(const string &str){
 	return parser.read_arr();
 }
 
-inline json_str* json_tool::parse_str(const std::string &){
-	return nullptr;
-}
 /**
 * class json_error
 */
@@ -376,32 +373,43 @@ std::map<std::string, json_node*>* json_parser::read_obj(){
 }
 std::list<json_node*>* json_parser::read_arr(){
 	trim();
-	if(str[pos] != '{'){
+	if(str[pos] != '['){
 		//TODO Exception
 	}
+	++pos;
 	list<json_node*> *arr = new list<json_node*>();
 
-	for(int size = str.size(); pos<size; ++pos){
+	for(int size = str.size(); pos<size; ){
 		json_node* node = nullptr;
-		
-		/*
-		switch (str[i]) {
-			case '}':
+
+		switch (str[pos]) {
+			case ']':
+			P("Num.2");
+			++pos;
 			return arr;
 			case '{':
+
 			node = new json_obj(read_obj());
 			break;
 			case '[':
-			node = new json_obj(read_arr());
+			P("Num.1");
+
+			node = new json_arr(read_arr());
 			break;
+			case ' ':
 			case ',':
-
-			break;
+			P("Num.3");
+			++pos;
+			continue;
 			default:
-
+			node = read_str();
 			break;
-		}*/
+		}
 		arr->push_back(node);
 	}
-	ERROR("no }");
+	ERROR("no ]");
+}
+
+json_str* json_parser::read_str(){
+	return nullptr;
 }
