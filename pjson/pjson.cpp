@@ -358,17 +358,20 @@ json_error::operator string(){
 * class json_parser
 */
 
-json_parser::json_parser(const std::string &s) : str(s), pos(0){}
+json_parser::json_parser(const std::string &s) : str(s), pos(0), size(s.size()){}
 void json_parser::trim(){
 	while(str[pos] == EMIPT)
 		pos++;
 }
 std::map<std::string, json_node*>* json_parser::read_obj(){
+	trim();
+	if(str[pos] != '{'){
+		//TODO Exception
+	}
+	++pos;
 	map<string, json_node*> *obj = new map<string, json_node*>();
-	/*
-	while(){
 
-	}*/
+
 	return obj;
 }
 std::list<json_node*>* json_parser::read_arr(){
@@ -379,7 +382,7 @@ std::list<json_node*>* json_parser::read_arr(){
 	++pos;
 	list<json_node*> *arr = new list<json_node*>();
 
-	for(int size = str.size(); pos<size; ){
+	while(pos < size){
 		json_node* node = nullptr;
 
 		switch (str[pos]) {

@@ -175,13 +175,14 @@ class json_parser{
 	friend json_tool;
 
 	unsigned pos;
-	std::string str;
+	const std::string str;
+	const unsigned size;
 	json_parser(const std::string &);
 	void trim();
 	std::map<std::string, json_node*>* read_obj();
 	std::list<json_node*>* read_arr();
 	json_str* read_str();
-
+	void read_key_value(std::map<std::string, json_node*>*);
 
 };
 
