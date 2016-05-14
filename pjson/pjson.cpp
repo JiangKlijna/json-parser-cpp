@@ -416,3 +416,4 @@ std::list<json_node*>* json_parser::read_arr(){
 json_str* json_parser::read_str(){
 	return nullptr;
 }
+void json_parser::read_key_value(std::map<std::string, json_node*>*){}
