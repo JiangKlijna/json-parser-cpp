@@ -370,7 +370,9 @@ std::map<std::string, json_node*>* json_parser::read_obj(){
 	}
 	++pos;
 	map<string, json_node*> *obj = new map<string, json_node*>();
+	while(pos < size){
 
+	}
 
 	return obj;
 }
