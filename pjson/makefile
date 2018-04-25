@@ -1,14 +1,14 @@
 std=-std=c++11
-obj=json.o pjson.o
-name=json
+obj=main.o json.o
+name=main
 
 main: $(obj)
 	g++ $(std) -o $(name) $(obj)
 
-json.o: pjson.h
+main.o: json.h
+	g++ $(std) -c main.cpp -o main.o
+json.o: json.h
 	g++ $(std) -c json.cpp -o json.o
-pjson.o: pjson.h
-	g++ $(std) -c pjson.cpp -o pjson.o
 
 clean:
 	rm *.o

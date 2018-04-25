@@ -9,7 +9,7 @@
 #include <map>
 #include <list>
 
-namespace pjson {
+namespace json {
 
 class json_node;
 class json_obj;
