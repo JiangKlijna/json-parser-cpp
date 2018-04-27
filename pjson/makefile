@@ -10,5 +10,9 @@ main.o: json.h
 json.o: json.h
 	g++ $(std) -c json.cpp -o json.o
 
-clean:
-	rm *.o
+echo:
+	echo echo echo echo echo echo echo echo echo echo
+	echo echo echo echo echo echo echo echo
+	echo echo echo echo echo echo
+	echo echo echo echo
+	echo echo
