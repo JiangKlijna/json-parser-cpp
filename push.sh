@@ -10,7 +10,7 @@ function push() {
 }
 
 function check() {
-	if [ -z $1 ]; then
+	if [ -z "$1" ]; then
 		echo $2
 		exit 1
 	fi
@@ -19,4 +19,4 @@ function check() {
 check "$1" "git add ?"
 check "$2" "git commit -m ?"
 
-push $1 $2 $3 $4
+push "$1" "$2" "$3" "$4"
