@@ -26,3 +26,8 @@
 *.exe
 *.out
 *.app
+
+# Clion
+.idea/
+CMakeLists.txt
+cmake-build-debug/
