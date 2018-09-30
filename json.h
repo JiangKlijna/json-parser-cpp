@@ -140,21 +140,21 @@ namespace json {
         json_arr &add(const json_arr &value);
 
         //erase element
-        json_arr &erase(const int &index);
+        json_arr &erase(const size_t &index);
 
         //update element
-        json_arr &put(const json_str &value, const int &index);
+        json_arr &put(const json_str &value, const size_t &index);
 
-        json_arr &put(const json_obj &value, const int &index);
+        json_arr &put(const json_obj &value, const size_t &index);
 
-        json_arr &put(const json_arr &value, const int &index);
+        json_arr &put(const json_arr &value, const size_t &index);
 
         //get element
-        json_str &get_json_str(const int &index);
+        json_str &get_json_str(const size_t &index);
 
-        json_arr &get_json_arr(const int &index);
+        json_arr &get_json_arr(const size_t &index);
 
-        json_obj &get_json_obj(const int &index);
+        json_obj &get_json_obj(const size_t &index);
 
         // json_node
         operator std::string() override;
