@@ -101,8 +101,8 @@ namespace json {
 
         json_obj &put(const std::string &key, const json_arr &value);
 
-        //erase element
-        json_obj &erase(const std::string &key);
+        //erase element and return point
+        json_node *erase(const std::string &key);
 
         //get element
         json_str &get_json_str(const std::string &key);
@@ -139,8 +139,8 @@ namespace json {
 
         json_arr &add(const json_arr &value);
 
-        //erase element
-        json_arr &erase(const size_t &index);
+        //erase element and return point
+        json_node *erase(const size_t &index);
 
         //update element
         json_arr &put(const json_str &value, const size_t &index);
