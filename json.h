@@ -95,11 +95,11 @@ namespace json {
         ~json_obj();
 
         //add or update element
-        json_obj &put(const std::string &key, const json_str &value);
+        json_node *put(const std::string &key, const json_str &value);
 
-        json_obj &put(const std::string &key, const json_obj &value);
+        json_node *put(const std::string &key, const json_obj &value);
 
-        json_obj &put(const std::string &key, const json_arr &value);
+        json_node *put(const std::string &key, const json_arr &value);
 
         //erase element and return point
         json_node *erase(const std::string &key);
