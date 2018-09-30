@@ -180,6 +180,8 @@ namespace json {
 
         inline static std::string xtos(const void *);
 
+        inline static std::string btos(const bool &);
+
         inline static int stoi(const std::string &);
 
         inline static long stol(const std::string &);
