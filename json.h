@@ -167,13 +167,7 @@ namespace json {
     };
 
     struct json_error : public std::logic_error {
-        explicit json_error(const std::string &s);
-
-        inline static void error(const std::string &);
-
-        inline static void check(bool, const std::string &);
-
-        inline static void check_null(void *, const std::string &);
+        explicit json_error(const std::string &s) : std::logic_error(s) {}
     };
 
     struct json_tool {
