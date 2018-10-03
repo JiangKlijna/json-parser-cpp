@@ -19,6 +19,10 @@
 #define CURLY_BRACES_L "{"
 #define CURLY_BRACES_R "}"
 
+#define ERROR(str) throw json_error(str)
+#define CHECK(b, str) if(b){ERROR(str);}
+#define CHECK_NULL(a, str) CHECK((nullptr == (a)), str)
+
 using namespace std;
 using namespace json;
 
