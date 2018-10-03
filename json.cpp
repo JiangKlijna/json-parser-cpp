@@ -85,3 +85,89 @@ bool json_str::empty() {
 void json_str::clear() {
     value.clear();
 }
+
+/**
+* class json_obj
+*/
+json_obj::json_obj() :
+        json_node(json_type::obj), data(map<string, json_node>()) {
+}
+
+json_obj::json_obj(const string &str) : json_obj() {
+    json_tool::parser_obj(str, data);
+}
+
+json_obj::json_obj(map<string, json_node> &data) :
+        json_node(json_type::obj), data(data) {
+}
+
+json_obj::~json_obj() {
+    printf("json_obj::~json_obj");
+}
+
+//add or update element and return point
+json_node *json_obj::put(const string &key, const json_str &value) {
+    auto iter = data.find(key);
+    json_node *prev = iter->second;
+    data.insert(pair<string, json_node>(key, value));
+    return prev;
+}
+
+json_node *json_obj::put(const string &key, const json_obj &value) {
+    auto iter = data.find(key);
+    json_node *prev = iter->second;
+    data.insert(pair<string, json_node>(key, value));
+    return prev;
+}
+
+json_node *json_obj::put(const string &key, const json_arr &value) {
+    auto iter = data.find(key);
+    json_node *prev = iter->second;
+    data.insert(pair<string, json_node>(key, value));
+    return prev;
+}
+
+//erase element and return point
+json_node *json_obj::erase(const string &key) {
+    auto node = data.find(key);
+    data.erase(key);
+    return node->second;
+}
+
+//get element
+json_str &json_obj::get_json_str(const string &key) {
+    auto iter = data.find(key);
+    CHECK(iter == data.end(), key + " is nullptr");
+    CHECK(iter->second.type != json_type::str, key + " is not json_str");
+    return iter->second;
+}
+
+json_arr &json_obj::get_json_arr(const string &key) {
+    auto iter = data.find(key);
+    CHECK(iter == data.end(), key + " is nullptr");
+    CHECK(iter->second.type != json_type::arr, key + " is not json_arr");
+    return iter->second;
+}
+
+json_obj &json_obj::get_json_obj(const string &key) {
+    auto iter = data.find(key);
+    CHECK(iter == data.end(), key + " is nullptr");
+    CHECK(iter->second.type != json_type::obj, key + " is not json_obj");
+    return iter->second;
+}
+
+json_obj::operator std::string() {
+    return "{}";
+}
+
+size_t json_obj::size() {
+    return data.size();
+}
+
+bool json_obj::empty() {
+    return data.empty();
+}
+
+void json_obj::clear() {
+    data.clear();
+}
