@@ -126,9 +126,9 @@ namespace json {
     public:
         json_arr();
 
-        json_arr(std::vector<json_node> &data);
+        explicit json_arr(const std::string &json);
 
-        json_arr(const std::string &json);
+        explicit json_arr(std::vector<json_node> &data);
 
         ~json_arr();
 
