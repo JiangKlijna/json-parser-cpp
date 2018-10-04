@@ -171,3 +171,98 @@ bool json_obj::empty() {
 void json_obj::clear() {
     data.clear();
 }
+
+/**
+* class json_arr
+*/
+json_arr::json_arr() :
+        json_node(json_type::arr), data(std::vector<json_node>()) {
+}
+
+json_arr::json_arr(const string &str) : json_arr() {
+    json_tool::parser_arr(str, data);
+}
+
+json_arr::json_arr(std::vector<json_node> &data) :
+        json_node(json_type::arr), data(data) {
+}
+
+//add element
+json_arr &json_arr::add(const json_str &value) {
+    data.push_back(value);
+    return *this;
+}
+
+json_arr &json_arr::add(const json_obj &value) {
+    data.push_back(value);
+    return *this;
+}
+
+json_arr &json_arr::add(const json_arr &value) {
+    data.push_back(value);
+    return *this;
+}
+
+//erase element
+json_node *json_arr::erase(const size_t &index) {
+    CHECK(index >= data.size(), "index out of range");
+    auto node = data.begin() + index;
+    data.erase(node);
+    return node.base();
+}
+
+//update element
+json_arr &json_arr::put(const json_str &value, const size_t &index) {
+    data.insert(data.begin() + index, value);
+    return *this;
+}
+
+json_arr &json_arr::put(const json_obj &value, const size_t &index) {
+    data.insert(data.begin() + index, value);
+    return *this;
+}
+
+json_arr &json_arr::put(const json_arr &value, const size_t &index) {
+    data.insert(data.begin() + index, value);
+    return *this;
+}
+
+//get element
+json_str &json_arr::get_json_str(const size_t &index) {
+    CHECK(index >= data.size(), "index out of range");
+    auto base = (data.begin() + index).base();
+    CHECK(base->type != json_type::str, "json_arr[" + json_tool::xtos(&index) + "] is not json_str");
+    return (json_str &) (*base);
+}
+
+json_arr &json_arr::get_json_arr(const size_t &index) {
+    CHECK(index >= data.size(), "index out of range");
+    auto base = (data.begin() + index).base();
+    CHECK(base->type != json_type::arr, "json_arr[" + json_tool::xtos(&index) + "] is not json_arr");
+    return (json_arr &) (*base);
+}
+
+
+json_obj &json_arr::get_json_obj(const size_t &index) {
+    CHECK(index >= data.size(), "index out of range");
+    json_node *base = (data.begin() + index).base();
+    CHECK(base->type != json_type::obj, "json_arr[" + json_tool::xtos(&index) + "] is not json_obj");
+    return (json_obj &) (*base);
+}
+
+// json_node
+json_arr::operator std::string() {
+    return "[]";
+}
+
+size_t json_arr::size() {
+    return data.size();
+}
+
+bool json_arr::empty() {
+    return data.empty();
+}
+
+void json_arr::clear() {
+    data.clear();
+}
