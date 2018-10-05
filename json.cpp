@@ -266,3 +266,49 @@ bool json_arr::empty() {
 void json_arr::clear() {
     data.clear();
 }
+
+
+/**
+* class json_tool
+*/
+inline string json_tool::xtos(const void *p) {
+    ostringstream buf;
+    buf << &(p);
+    return buf.str();
+}
+
+inline string json_tool::btos(const bool &b) {
+    return b ? "true" : "false";
+}
+
+inline int json_tool::stoi(const string &v) {
+    return strtol(v.c_str(), nullptr, 10);
+}
+
+inline long json_tool::stol(const string &v) {
+    return strtol(v.c_str(), nullptr, 10);
+}
+
+inline double json_tool::stod(const string &v) {
+    return strtod(v.c_str(), nullptr);
+}
+
+inline bool json_tool::stob(const string &v) {
+    return (v == "true");
+}
+
+void json_tool::parser_obj(const string &json, map<string, json_node> &data) {
+
+}
+
+void json_tool::parser_arr(const string &json, vector<json_node> &data) {
+
+}
+
+const string json_tool::to_json(map<string, json_node> &data) {
+    return "{}";
+}
+
+const string json_tool::to_json(vector<json_node> &data) {
+    return "[]";
+}
