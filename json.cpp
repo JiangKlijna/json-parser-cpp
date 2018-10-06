@@ -157,7 +157,7 @@ json_obj &json_obj::get_json_obj(const string &key) {
 }
 
 json_obj::operator std::string() {
-    return "{}";
+    return json_tool::to_json(data);
 }
 
 size_t json_obj::size() {
@@ -252,7 +252,7 @@ json_obj &json_arr::get_json_obj(const size_t &index) {
 
 // json_node
 json_arr::operator std::string() {
-    return "[]";
+    return json_tool::to_json(data);
 }
 
 size_t json_arr::size() {
