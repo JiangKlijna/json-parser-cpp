@@ -1,34 +1,26 @@
 #include <iostream>
 #include <cstdlib>
-using namespace std;
-
 #include "json.h"
+
+using namespace std;
+using namespace json;
 
 #define P(data) std::cout<<(data)<<std::endl
 #define PR(str, data) std::cout<<(str)<<(data)<<std::endl
 #define PL P(__LINE__)
 
+int main() {
+    json_arr arr;
+    arr.add(1).add("string").add(0.3).add(false);
+    PR("arr->size() : ", arr.size());
+    PR("arr->string() : ", string(arr));
 
-int main(void) {
-	json::json_arr *arr = new json::json_arr("[  [ ] ]");
-	const char* cstr = "cstr";
-	string cppstr("cppstr");
-	arr->put(cstr)->put(cppstr)->put(0.2356)->put(-68)->put(false);
-	// arr->erase(4);TODO
-	PR("arr->size() : ", arr->size());
-	PR("arr->str() : ", arr->str());
-	delete arr;
-
-	json::json_obj *obj = new json::json_obj();
-	obj->put("key","value")->put("number",66)->put("key", "v2")->put("key", "v3");
-	obj->erase("number");
-	try{
-		obj->get_string("null key");
-	}catch(json::json_error &e){
-		P((string) e);
-	}
-	P(obj->str());
-	delete obj;
+    json_obj obj;
+    obj.put("key", "value");
+    obj.put("number", 66);
+    obj.put("bool", true);
+    PR("obj->size() : ", obj.size());
+    PR("obj->string() : ", string(obj));
 
 	exit(EXIT_SUCCESS);
 }
