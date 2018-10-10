@@ -84,30 +84,30 @@ namespace json {
     };
 
     class json_obj : public json_node {
-        std::map<std::string, json_node> data;
+        std::map<std::string, json_node*> data;
     public:
         json_obj();
 
         explicit json_obj(const std::string &json);
 
-        explicit json_obj(std::map<std::string, json_node> &data);
+        explicit json_obj(std::map<std::string, json_node*> &data);
 
         //add or update element
-        json_node *put(const std::string &key, const json_str &value);
+        json_node *put(const std::string &key, const json_str *value);
 
-        json_node *put(const std::string &key, const json_obj &value);
+        json_node *put(const std::string &key, const json_obj *value);
 
-        json_node *put(const std::string &key, const json_arr &value);
+        json_node *put(const std::string &key, const json_arr *value);
 
         //erase element and return point
         json_node *erase(const std::string &key);
 
         //get element
-        json_str &get_json_str(const std::string &key);
+        json_str *get_json_str(const std::string &key);
 
-        json_arr &get_json_arr(const std::string &key);
+        json_arr *get_json_arr(const std::string &key);
 
-        json_obj &get_json_obj(const std::string &key);
+        json_obj *get_json_obj(const std::string &key);
 
         // json_node override func
         std::string str() override;
