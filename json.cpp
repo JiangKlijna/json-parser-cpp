@@ -54,7 +54,7 @@ json_str::json_str(const double &value) :
         json_node(json_type::str), type(json_str_type::json_double), value(json_tool::xtos(&value)) {
 }
 
-json_str::operator std::string() {
+string json_str::str() {
     return (type == json_str_type::json_string) ? (QUOTE + value + QUOTE) : (value);
 }
 
@@ -99,10 +99,6 @@ json_obj::json_obj(const string &str) : json_obj() {
 
 json_obj::json_obj(map<string, json_node> &data) :
         json_node(json_type::obj), data(data) {
-}
-
-json_obj::~json_obj() {
-    printf("json_obj::~json_obj");
 }
 
 //add or update element and return point
@@ -154,10 +150,6 @@ json_obj &json_obj::get_json_obj(const string &key) {
     CHECK(iter == data.end(), key + " is nullptr");
     CHECK(iter->second.type != json_type::obj, key + " is not json_obj");
     return iter->second;
-}
-
-json_obj::operator std::string() {
-    return json_tool::to_json(data);
 }
 
 size_t json_obj::size() {
@@ -251,7 +243,7 @@ json_obj &json_arr::get_json_obj(const size_t &index) {
 }
 
 // json_node
-json_arr::operator std::string() {
+string json_arr::str() {
     return json_tool::to_json(data);
 }
 
