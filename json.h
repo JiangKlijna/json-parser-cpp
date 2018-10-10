@@ -39,7 +39,7 @@ namespace json {
     public:
         const json_type type;
 
-        virtual operator std::string() = 0;
+        virtual std::string string() = 0;
 
         virtual size_t size() = 0;
 
@@ -74,7 +74,7 @@ namespace json {
         operator double();
 
         // json_node override func
-        operator std::string() override;
+        std::string string() override;
 
         size_t size() override;
 
@@ -91,8 +91,6 @@ namespace json {
         explicit json_obj(const std::string &json);
 
         explicit json_obj(std::map<std::string, json_node> &data);
-
-        ~json_obj();
 
         //add or update element
         json_node *put(const std::string &key, const json_str &value);
@@ -112,7 +110,7 @@ namespace json {
         json_obj &get_json_obj(const std::string &key);
 
         // json_node override func
-        operator std::string() override;
+        std::string string() override;
 
         size_t size() override;
 
@@ -129,8 +127,6 @@ namespace json {
         explicit json_arr(const std::string &json);
 
         explicit json_arr(std::vector<json_node> &data);
-
-        ~json_arr();
 
         //add element
         json_arr &add(const json_str &value);
@@ -157,7 +153,7 @@ namespace json {
         json_obj &get_json_obj(const size_t &index);
 
         // json_node
-        operator std::string() override;
+        std::string string() override;
 
         size_t size() override;
 
