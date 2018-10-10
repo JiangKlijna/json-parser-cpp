@@ -120,37 +120,37 @@ namespace json {
     };
 
     class json_arr : public json_node {
-        std::vector<json_node> data;
+        std::vector<json_node*> data;
     public:
         json_arr();
 
         explicit json_arr(const std::string &json);
 
-        explicit json_arr(std::vector<json_node> &data);
+        explicit json_arr(std::vector<json_node*> &data);
 
         //add element
-        json_arr &add(const json_str &value);
+        json_arr &add(const json_str *value);
 
-        json_arr &add(const json_obj &value);
+        json_arr &add(const json_obj *value);
 
-        json_arr &add(const json_arr &value);
+        json_arr &add(const json_arr *value);
 
         //erase element and return point
         json_node *erase(const size_t &index);
 
         //update element
-        json_arr &put(const json_str &value, const size_t &index);
+        json_node *put(const json_str &value, const size_t &index);
 
-        json_arr &put(const json_obj &value, const size_t &index);
+        json_node *put(const json_obj &value, const size_t &index);
 
-        json_arr &put(const json_arr &value, const size_t &index);
+        json_node *put(const json_arr &value, const size_t &index);
 
         //get element
-        json_str &get_json_str(const size_t &index);
+        json_str *get_json_str(const size_t &index);
 
-        json_arr &get_json_arr(const size_t &index);
+        json_arr *get_json_arr(const size_t &index);
 
-        json_obj &get_json_obj(const size_t &index);
+        json_obj *get_json_obj(const size_t &index);
 
         // json_node
         std::string str() override;
