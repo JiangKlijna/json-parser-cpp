@@ -84,15 +84,21 @@ namespace json {
     };
 
     class json_obj : public json_node {
-        std::map<std::string, json_node*> data;
+        std::map<std::string, json_node *> data;
     public:
         json_obj();
 
         explicit json_obj(const std::string &json);
 
-        explicit json_obj(std::map<std::string, json_node*> &data);
+        explicit json_obj(std::map<std::string, json_node *> &data);
 
         //add or update element
+        json_node *put(const std::string &key, const json_str &value) { return put(key, &value); }
+
+        json_node *put(const std::string &key, const json_obj &value) { return put(key, &value); }
+
+        json_node *put(const std::string &key, const json_arr &value) { return put(key, &value); }
+        
         json_node *put(const std::string &key, const json_str *value);
 
         json_node *put(const std::string &key, const json_obj *value);
@@ -120,13 +126,13 @@ namespace json {
     };
 
     class json_arr : public json_node {
-        std::vector<json_node*> data;
+        std::vector<json_node *> data;
     public:
         json_arr();
 
         explicit json_arr(const std::string &json);
 
-        explicit json_arr(std::vector<json_node*> &data);
+        explicit json_arr(std::vector<json_node *> &data);
 
         //add element
         json_arr &add(const json_str *value);
