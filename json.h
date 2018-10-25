@@ -98,7 +98,7 @@ namespace json {
         json_node *put(const std::string &key, const json_obj &value) { return put(key, &value); }
 
         json_node *put(const std::string &key, const json_arr &value) { return put(key, &value); }
-        
+
         json_node *put(const std::string &key, const json_str *value);
 
         json_node *put(const std::string &key, const json_obj *value);
@@ -135,12 +135,12 @@ namespace json {
         explicit json_arr(std::vector<json_node *> &data);
 
         //add element
-        json_arr &add(const json_str &value) {return add(&value);}
+        json_arr &add(const json_str &value) { return add(&value); }
 
-        json_arr &add(const json_obj &value) {return add(&value);}
+        json_arr &add(const json_obj &value) { return add(&value); }
 
-        json_arr &add(const json_arr &value) {return add(&value);}
-        
+        json_arr &add(const json_arr &value) { return add(&value); }
+
         json_arr &add(const json_str *value);
 
         json_arr &add(const json_obj *value);
@@ -151,11 +151,17 @@ namespace json {
         json_node *erase(const size_t &index);
 
         //update element
-        json_node *put(const json_str &value, const size_t &index);
+        json_node *put(const json_str &value, const size_t &index) { return put(&value, index); }
 
-        json_node *put(const json_obj &value, const size_t &index);
+        json_node *put(const json_obj &value, const size_t &index) { return put(&value, index); }
 
-        json_node *put(const json_arr &value, const size_t &index);
+        json_node *put(const json_arr &value, const size_t &index) { return put(&value, index); }
+
+        json_node *put(const json_str *value, const size_t &index);
+
+        json_node *put(const json_obj *value, const size_t &index);
+
+        json_node *put(const json_arr *value, const size_t &index);
 
         //get element
         json_str *get_json_str(const size_t &index);
