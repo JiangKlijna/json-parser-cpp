@@ -135,6 +135,12 @@ namespace json {
         explicit json_arr(std::vector<json_node *> &data);
 
         //add element
+        json_arr &add(const json_str &value) {return add(&value);}
+
+        json_arr &add(const json_obj &value) {return add(&value);}
+
+        json_arr &add(const json_arr &value) {return add(&value);}
+        
         json_arr &add(const json_str *value);
 
         json_arr &add(const json_obj *value);
