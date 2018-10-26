@@ -198,13 +198,13 @@ namespace json {
 
         inline static bool stob(const std::string &);
 
-        static void parser_obj(const std::string &, std::map<std::string, json_node> &);
+        static void parser_obj(const std::string &, std::map<std::string, json_node*> &);
 
-        static void parser_arr(const std::string &, std::vector<json_node> &);
+        static void parser_arr(const std::string &, std::vector<json_node*> &);
 
-        static const std::string to_json(std::map<std::string, json_node> &);
+        static const std::string to_json(std::map<std::string, json_node*> &);
 
-        static const std::string to_json(std::vector<json_node> &);
+        static const std::string to_json(std::vector<json_node*> &);
     };
 }
 #endif
