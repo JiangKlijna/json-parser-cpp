@@ -289,18 +289,18 @@ inline bool json_tool::stob(const string &v) {
     return (v == "true");
 }
 
-void json_tool::parser_obj(const string &json, map<string, json_node> &data) {
+void json_tool::parser_obj(const string &json, map<string, json_node*> &data) {
 
 }
 
-void json_tool::parser_arr(const string &json, vector<json_node> &data) {
+void json_tool::parser_arr(const string &json, vector<json_node*> &data) {
 
 }
 
-const string json_tool::to_json(map<string, json_node> &data) {
+const string json_tool::to_json(map<string, json_node*> &data) {
     return "{}";
 }
 
-const string json_tool::to_json(vector<json_node> &data) {
+const string json_tool::to_json(vector<json_node*> &data) {
     return "[]";
 }
