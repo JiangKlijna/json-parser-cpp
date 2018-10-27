@@ -152,6 +152,11 @@ json_obj *json_obj::get_json_obj(const string &key) {
     return (json_obj *) iter->second;
 }
 
+// json_node
+string json_obj::str() {
+    return json_tool::to_json(data);
+}
+
 size_t json_obj::size() {
     return data.size();
 }
