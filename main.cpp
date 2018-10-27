@@ -11,16 +11,19 @@ using namespace json;
 
 int main() {
     json_arr arr;
-    arr.add(1).add("string").add(0.3).add(false);
+    arr.add(json_str(1))
+            .add(json_str("string"))
+            .add(json_str(0.3))
+            .add(json_str(false));
     PR("arr->size() : ", arr.size());
-    PR("arr->string() : ", string(arr));
+    PR("arr->string() : ", arr.str());
 
     json_obj obj;
     obj.put("key", "value");
     obj.put("number", 66);
     obj.put("bool", true);
     PR("obj->size() : ", obj.size());
-    PR("obj->string() : ", string(obj));
+    PR("obj->string() : ", obj.str());
 
-	exit(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
