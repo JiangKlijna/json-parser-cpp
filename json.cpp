@@ -168,30 +168,30 @@ void json_obj::clear() {
 * class json_arr
 */
 json_arr::json_arr() :
-        json_node(json_type::arr), data(std::vector<json_node>()) {
+        json_node(json_type::arr), data(std::vector<json_node *>()) {
 }
 
 json_arr::json_arr(const string &str) : json_arr() {
     json_tool::parser_arr(str, data);
 }
 
-json_arr::json_arr(std::vector<json_node> &data) :
+json_arr::json_arr(std::vector<json_node *> &data) :
         json_node(json_type::arr), data(data) {
 }
 
 //add element
-json_arr &json_arr::add(const json_str &value) {
-    data.push_back(value);
+json_arr &json_arr::add(const json_str *value) {
+    data.push_back((json_node *) value);
     return *this;
 }
 
-json_arr &json_arr::add(const json_obj &value) {
-    data.push_back(value);
+json_arr &json_arr::add(const json_obj *value) {
+    data.push_back((json_node *) value);
     return *this;
 }
 
-json_arr &json_arr::add(const json_arr &value) {
-    data.push_back(value);
+json_arr &json_arr::add(const json_arr *value) {
+    data.push_back((json_node *) value);
     return *this;
 }
 
@@ -200,46 +200,49 @@ json_node *json_arr::erase(const size_t &index) {
     CHECK(index >= data.size(), "index out of range");
     auto node = data.begin() + index;
     data.erase(node);
-    return node.base();
+    return (json_node *) node.base();
 }
 
 //update element
-json_arr &json_arr::put(const json_str &value, const size_t &index) {
-    data.insert(data.begin() + index, value);
-    return *this;
+json_node *json_arr::put(const json_str *value, const size_t &index) {
+    auto node = data.begin() + index;
+    data.insert(data.begin() + index, (json_node *) value);
+    return (json_node *) node.base();
 }
 
-json_arr &json_arr::put(const json_obj &value, const size_t &index) {
-    data.insert(data.begin() + index, value);
-    return *this;
+json_node *json_arr::put(const json_obj *value, const size_t &index) {
+    auto node = data.begin() + index;
+    data.insert(data.begin() + index, (json_node *) value);
+    return (json_node *) node.base();
 }
 
-json_arr &json_arr::put(const json_arr &value, const size_t &index) {
-    data.insert(data.begin() + index, value);
-    return *this;
+json_node *json_arr::put(const json_arr *value, const size_t &index) {
+    auto node = data.begin() + index;
+    data.insert(data.begin() + index, (json_node *) value);
+    return (json_node *) node.base();
 }
 
 //get element
-json_str &json_arr::get_json_str(const size_t &index) {
+json_str *json_arr::get_json_str(const size_t &index) {
     CHECK(index >= data.size(), "index out of range");
-    auto base = (data.begin() + index).base();
+    auto base = (json_node *) (data.begin() + index).base();
     CHECK(base->type != json_type::str, "json_arr[" + json_tool::xtos(&index) + "] is not json_str");
-    return (json_str &) (*base);
+    return (json_str *) base;
 }
 
-json_arr &json_arr::get_json_arr(const size_t &index) {
+json_arr *json_arr::get_json_arr(const size_t &index) {
     CHECK(index >= data.size(), "index out of range");
-    auto base = (data.begin() + index).base();
+    auto base = (json_node *) (data.begin() + index).base();
     CHECK(base->type != json_type::arr, "json_arr[" + json_tool::xtos(&index) + "] is not json_arr");
-    return (json_arr &) (*base);
+    return (json_arr *) base;
 }
 
 
-json_obj &json_arr::get_json_obj(const size_t &index) {
+json_obj *json_arr::get_json_obj(const size_t &index) {
     CHECK(index >= data.size(), "index out of range");
-    json_node *base = (data.begin() + index).base();
+    auto base = (json_node *) (data.begin() + index).base();
     CHECK(base->type != json_type::obj, "json_arr[" + json_tool::xtos(&index) + "] is not json_obj");
-    return (json_obj &) (*base);
+    return (json_obj *) base;
 }
 
 // json_node
