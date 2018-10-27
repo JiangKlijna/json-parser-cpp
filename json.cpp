@@ -90,36 +90,36 @@ void json_str::clear() {
 * class json_obj
 */
 json_obj::json_obj() :
-        json_node(json_type::obj), data(map<string, json_node>()) {
+        json_node(json_type::obj), data(map<string, json_node *>()) {
 }
 
 json_obj::json_obj(const string &str) : json_obj() {
     json_tool::parser_obj(str, data);
 }
 
-json_obj::json_obj(map<string, json_node> &data) :
+json_obj::json_obj(map<string, json_node *> &data) :
         json_node(json_type::obj), data(data) {
 }
 
 //add or update element and return point
-json_node *json_obj::put(const string &key, const json_str &value) {
+json_node *json_obj::put(const string &key, const json_str *value) {
     auto iter = data.find(key);
     json_node *prev = iter->second;
-    data.insert(pair<string, json_node>(key, value));
+    data.insert(pair<string, json_node *>(key, (json_node *) value));
     return prev;
 }
 
-json_node *json_obj::put(const string &key, const json_obj &value) {
+json_node *json_obj::put(const string &key, const json_obj *value) {
     auto iter = data.find(key);
     json_node *prev = iter->second;
-    data.insert(pair<string, json_node>(key, value));
+    data.insert(pair<string, json_node *>(key, (json_node *) value));
     return prev;
 }
 
-json_node *json_obj::put(const string &key, const json_arr &value) {
+json_node *json_obj::put(const string &key, const json_arr *value) {
     auto iter = data.find(key);
     json_node *prev = iter->second;
-    data.insert(pair<string, json_node>(key, value));
+    data.insert(pair<string, json_node *>(key, (json_node *) value));
     return prev;
 }
 
@@ -131,25 +131,25 @@ json_node *json_obj::erase(const string &key) {
 }
 
 //get element
-json_str &json_obj::get_json_str(const string &key) {
+json_str *json_obj::get_json_str(const string &key) {
     auto iter = data.find(key);
     CHECK(iter == data.end(), key + " is nullptr");
-    CHECK(iter->second.type != json_type::str, key + " is not json_str");
-    return iter->second;
+    CHECK(iter->second->type != json_type::str, key + " is not json_str");
+    return (json_str *) iter->second;
 }
 
-json_arr &json_obj::get_json_arr(const string &key) {
+json_arr *json_obj::get_json_arr(const string &key) {
     auto iter = data.find(key);
     CHECK(iter == data.end(), key + " is nullptr");
-    CHECK(iter->second.type != json_type::arr, key + " is not json_arr");
-    return iter->second;
+    CHECK(iter->second->type != json_type::arr, key + " is not json_arr");
+    return (json_arr *) iter->second;
 }
 
-json_obj &json_obj::get_json_obj(const string &key) {
+json_obj *json_obj::get_json_obj(const string &key) {
     auto iter = data.find(key);
     CHECK(iter == data.end(), key + " is nullptr");
-    CHECK(iter->second.type != json_type::obj, key + " is not json_obj");
-    return iter->second;
+    CHECK(iter->second->type != json_type::obj, key + " is not json_obj");
+    return (json_obj *) iter->second;
 }
 
 size_t json_obj::size() {
@@ -289,18 +289,18 @@ inline bool json_tool::stob(const string &v) {
     return (v == "true");
 }
 
-void json_tool::parser_obj(const string &json, map<string, json_node*> &data) {
+void json_tool::parser_obj(const string &json, map<string, json_node *> &data) {
 
 }
 
-void json_tool::parser_arr(const string &json, vector<json_node*> &data) {
+void json_tool::parser_arr(const string &json, vector<json_node *> &data) {
 
 }
 
-const string json_tool::to_json(map<string, json_node*> &data) {
+const string json_tool::to_json(map<string, json_node *> &data) {
     return "{}";
 }
 
-const string json_tool::to_json(vector<json_node*> &data) {
+const string json_tool::to_json(vector<json_node *> &data) {
     return "[]";
 }
