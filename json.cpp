@@ -320,5 +320,15 @@ const string json_tool::to_json(map<string, json_node *> &data) {
 }
 
 const string json_tool::to_json(vector<json_node *> &data) {
-    return "[]";
+    ostringstream buf;
+    buf << SQUARE_BRACKETS_L;
+    auto iter = data.begin(), begin = data.begin(), end = data.end();
+    for (; iter != end; iter++) {
+        if (iter != begin) {
+            buf << COMMA;
+        }
+        buf << (*iter)->str();
+    }
+    buf << SQUARE_BRACKETS_R;
+    return buf.str();
 }
