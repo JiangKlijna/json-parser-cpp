@@ -306,7 +306,17 @@ void json_tool::parser_arr(const string &json, vector<json_node *> &data) {
 }
 
 const string json_tool::to_json(map<string, json_node *> &data) {
-    return "{}";
+    ostringstream buf;
+    buf << CURLY_BRACES_L;
+    auto iter = data.begin(), begin = data.begin(), end = data.end();
+    for (; iter != end; iter++) {
+        if (iter != begin) {
+            buf << COMMA;
+        }
+        buf << QUOTE << iter->first << QUOTE << COLON << iter->second->str();
+    }
+    buf << CURLY_BRACES_R;
+    return buf.str();
 }
 
 const string json_tool::to_json(vector<json_node *> &data) {
