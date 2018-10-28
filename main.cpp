@@ -9,6 +9,28 @@ using namespace json;
 #define PR(str, data) std::cout<<__LINE__<<":\t"<<(str)<<(data)<<std::endl
 #define PL P(__LINE__)
 
+void testString() {
+    json_str s1("string");
+    json_str s2(12345678);
+    json_str s3(0.123456);
+    json_str s4(true);
+    json_str s5(1234567l);
+    PR("str->str() : ", s1.str());
+    PR("str->size() : ", s1.size());
+    s1.clear();
+    PR("str->empty() : ", s1.empty());
+    PR("str->str() : ", s1.str());
+
+    PR("str->str() : ", s2.str());
+    PR("str->size() : ", s2.size());
+    PR("str->str() : ", s3.str());
+    PR("str->size() : ", s3.size());
+    PR("str->str() : ", s4.str());
+    PR("str->size() : ", s4.size());
+    PR("str->str() : ", s5.str());
+    PR("str->size() : ", s5.size());
+}
+
 void testArray() {
     json_arr arr;
     arr.add(json_str(1))
@@ -65,6 +87,7 @@ void testObject() {
 }
 
 int main() {
+    testString();
     testArray();
     testObject();
     exit(EXIT_SUCCESS);
