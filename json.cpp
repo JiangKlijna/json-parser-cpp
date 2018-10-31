@@ -30,29 +30,17 @@ using namespace json;
 /**
 * class json_str
 */
-json_str::json_str(const string &v, const json_str_type t) :
-        json_node(json_type::str), type(t), value(v) {
-}
+json_str::json_str(const string &v, const json_str_type t) : json_node(json_type::str), type(t), value(v) {}
 
-json_str::json_str(const string &value) :
-        json_node(json_type::str), type(json_str_type::json_string), value(value) {
-}
+json_str::json_str(const string &value) : json_str(value, json_str_type::json_string) {}
 
-json_str::json_str(const bool &value) :
-        json_node(json_type::str), type(json_str_type::json_bool), value(json_tool::btos(value)) {
-}
+json_str::json_str(const bool &value) : json_str(json_tool::btos(value), json_str_type::json_bool) {}
 
-json_str::json_str(const int &value) :
-        json_node(json_type::str), type(json_str_type::json_int), value(json_tool::xtos(&value)) {
-}
+json_str::json_str(const int &value) : json_str(json_tool::xtos(&value), json_str_type::json_int) {}
 
-json_str::json_str(const long &value) :
-        json_node(json_type::str), type(json_str_type::json_long), value(json_tool::xtos(&value)) {
-}
+json_str::json_str(const long &value) : json_str(json_tool::xtos(&value), json_str_type::json_long) {}
 
-json_str::json_str(const double &value) :
-        json_node(json_type::str), type(json_str_type::json_double), value(json_tool::xtos(&value)) {
-}
+json_str::json_str(const double &value) : json_str(json_tool::xtos(&value), json_str_type::json_double) {}
 
 string json_str::str() {
     return (type == json_str_type::json_string) ? (QUOTE + value + QUOTE) : (value);
