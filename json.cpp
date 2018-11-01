@@ -36,11 +36,11 @@ json_str::json_str(const string &value) : json_str(value, json_str_type::json_st
 
 json_str::json_str(const bool &value) : json_str(json_tool::btos(value), json_str_type::json_bool) {}
 
-json_str::json_str(const int &value) : json_str(json_tool::xtos(&value), json_str_type::json_int) {}
+json_str::json_str(const int &value) : json_str(json_tool::itos(value), json_str_type::json_int) {}
 
-json_str::json_str(const long &value) : json_str(json_tool::xtos(&value), json_str_type::json_long) {}
+json_str::json_str(const long &value) : json_str(json_tool::ltos(value), json_str_type::json_long) {}
 
-json_str::json_str(const double &value) : json_str(json_tool::xtos(&value), json_str_type::json_double) {}
+json_str::json_str(const double &value) : json_str(json_tool::dtos(value), json_str_type::json_double) {}
 
 string json_str::str() {
     return (type == json_str_type::json_string) ? (QUOTE + value + QUOTE) : (value);
@@ -219,14 +219,14 @@ json_node *json_arr::put(const json_arr *value, const size_t &index) {
 json_str *json_arr::get_json_str(const size_t &index) {
     CHECK(index >= data.size(), "index out of range");
     auto base = (json_node *) (data.begin() + index).base();
-    CHECK(base->type != json_type::str, "json_arr[" + json_tool::xtos(&index) + "] is not json_str");
+    CHECK(base->type != json_type::str, "json_arr[" + json_tool::itos(index) + "] is not json_str");
     return (json_str *) base;
 }
 
 json_arr *json_arr::get_json_arr(const size_t &index) {
     CHECK(index >= data.size(), "index out of range");
     auto base = (json_node *) (data.begin() + index).base();
-    CHECK(base->type != json_type::arr, "json_arr[" + json_tool::xtos(&index) + "] is not json_arr");
+    CHECK(base->type != json_type::arr, "json_arr[" + json_tool::itos(index) + "] is not json_arr");
     return (json_arr *) base;
 }
 
@@ -234,7 +234,7 @@ json_arr *json_arr::get_json_arr(const size_t &index) {
 json_obj *json_arr::get_json_obj(const size_t &index) {
     CHECK(index >= data.size(), "index out of range");
     auto base = (json_node *) (data.begin() + index).base();
-    CHECK(base->type != json_type::obj, "json_arr[" + json_tool::xtos(&index) + "] is not json_obj");
+    CHECK(base->type != json_type::obj, "json_arr[" + json_tool::itos(index) + "] is not json_obj");
     return (json_obj *) base;
 }
 
@@ -259,9 +259,21 @@ void json_arr::clear() {
 /**
 * class json_tool
 */
-inline string json_tool::xtos(const void *p) {
+inline string json_tool::itos(const int &i) {
     ostringstream buf;
-    buf << &(p);
+    buf << i;
+    return buf.str();
+}
+
+inline string json_tool::ltos(const long &i) {
+    ostringstream buf;
+    buf << i;
+    return buf.str();
+}
+
+inline string json_tool::dtos(const double &i) {
+    ostringstream buf;
+    buf << i;
     return buf.str();
 }
 

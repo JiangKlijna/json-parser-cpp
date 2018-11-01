@@ -186,7 +186,11 @@ namespace json {
 
     struct json_tool {
 
-        inline static std::string xtos(const void *);
+        inline static std::string itos(const int &);
+
+        inline static std::string ltos(const long &);
+
+        inline static std::string dtos(const double &);
 
         inline static std::string btos(const bool &);
 
